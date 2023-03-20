@@ -4,7 +4,7 @@ using DGamingApp.Interfaces;
 namespace DGamingApp.Controllers
 {
     [ApiController]
-    [Route("[controller]")] // /api/users
+    [Route("api/[controller]")] // /api/users
     public class UsersController : Controller
     {
         private readonly IUserRepository _userRepository;
