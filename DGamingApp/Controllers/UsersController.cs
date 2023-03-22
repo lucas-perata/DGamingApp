@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DGamingApp.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DGamingApp.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")] // /api/users
-    public class UsersController : Controller
+    [Authorize]
+    public class UsersController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
         public UsersController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
+
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

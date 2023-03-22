@@ -1,4 +1,5 @@
-﻿namespace DGamingApp.Entities
+﻿
+namespace DGamingApp.Entities
 {
     public class AppUser
     {
