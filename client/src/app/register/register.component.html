@@ -1,0 +1,19 @@
+<form #registerForm="ngForm" (ngSubmit)="register()" autocomplete="off" action="">
+    <div class="card max-w-sm shadow-2xl bg-base-100" style="width: 50vw;">
+        <div class="card-body">
+            <h2 class="text-2xl font-bold text-center text-primary">Sign up</h2>
+          <div class="mt-6">
+            <div class="form-control mb-3">
+                <input type="text" placeholder="Username" name="username" [(ngModel)]="model.username" class="input input-bordered w-full max-w-xs" />
+              </div>
+              <div class="form-control">
+                <input type="password" placeholder="Password" name="password" [(ngModel)]="model.password" class="input input-bordered w-full max-w-xs" />
+              </div>
+          </div>
+          <div class="form-control flex-row justify-center gap-5 mt-4">
+            <button type="submit" class="btn hover:bg-secondary-accent bg-secondary" >Register</button>
+            <button type="button" class="text-red-500" (click)="cancel()">Cancel</button>
+          </div>
+        </div>
+      </div>
+</form>
