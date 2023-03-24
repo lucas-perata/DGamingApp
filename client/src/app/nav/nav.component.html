@@ -1,0 +1,27 @@
+<div class="navbar shadow-sm text-text bg-primary">
+    <div class="flex-1">
+      <a class="btn btn-ghost normal-case text-2xl">DG</a>
+      <ul class="menu menu-horizontal px-1 font-medium" *ngIf="(accountService.currentUser$ | async)">
+        <li><a>Matches</a></li>
+        <li><a>Lists</a></li>
+        <li><a>Messages</a></li>
+      </ul>
+    </div>
+
+    <div class="dropdown dropdown-end dropdown-hover m-1" *ngIf="(accountService.currentUser$ | async)">
+      <label tabindex="0" class="btn bg-accent m-1">Account</label>
+      <ul tabindex="0" class="bg-accent dropdown-content menu p-2 shadow  rounded-box w-52">
+        <li><a>Edit profile</a></li>
+        <li><a (click)="logout()">Logout</a></li>
+      </ul>
+    </div>
+
+      <div class="text-black" *ngIf="!(accountService.currentUser$ | async)">
+        <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off">
+          <input name="username" [(ngModel)]="model.username" type="text" placeholder="Username" class="input input-bordered max-w-xs m-1">
+          <input name="password" [(ngModel)]="model.password" type="password" placeholder="Password" class="input input-bordered max-w-xs m-1">
+          <button class="btn bg-secondary btn-md m-2 text-text shadow-white" type="submit">Login</button>
+        </form>
+      </div>
+</div>
+
