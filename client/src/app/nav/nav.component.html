@@ -1,15 +1,17 @@
 <div class="navbar shadow-sm text-text bg-primary">
     <div class="flex-1">
-      <a class="btn btn-ghost normal-case text-2xl">DG</a>
+      <a routerLink="" class="btn btn-ghost normal-case text-2xl">DG</a>
       <ul class="menu menu-horizontal px-1 font-medium" *ngIf="(accountService.currentUser$ | async)">
-        <li><a>Matches</a></li>
-        <li><a>Lists</a></li>
-        <li><a>Messages</a></li>
+        <ng-container >
+          <li><a class="text-gray-400" routerLink="/members" routerLinkActive="text-white">Matches</a></li>
+          <li><a  class="text-gray-400" routerLink="/lists" routerLinkActive="text-white">Lists</a></li>
+          <li><a  class="text-gray-400" routerLink="/messages" routerLinkActive="text-white">Messages</a></li>
+        </ng-container>
       </ul>
     </div>
 
-    <div class="dropdown dropdown-end dropdown-hover m-1" *ngIf="(accountService.currentUser$ | async)">
-      <label tabindex="0" class="btn bg-accent m-1">Account</label>
+    <div class="dropdown dropdown-end dropdown-hover m-1" *ngIf="(accountService.currentUser$ | async) as user">
+      <label tabindex="0" class="btn bg-accent hover:bg-accent-focus m-1">{{user.username}}</label>
       <ul tabindex="0" class="bg-accent dropdown-content menu p-2 shadow  rounded-box w-52">
         <li><a>Edit profile</a></li>
         <li><a (click)="logout()">Logout</a></li>
