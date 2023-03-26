@@ -1,0 +1,20 @@
+
+<div class="flex justify-center">  
+    <div class="flex md:flex-row items-center justify-center px-5 text-gray-700">
+        <div class="max-w-md">
+        <div class="text-5xl font-dark font-bold"></div>
+        <p class="text-2xl md:text-3xl font-light leading-normal mt-5 mb-5">Internal server error - refresh the page</p>
+    <ng-container *ngIf="error">
+        <h3>Error: {{error.message}}</h3>
+    </ng-container>
+    <p class="font-dark font-extrabold text-red-500">Note: probably is a problem in the API server</p>
+    <p class="text-xl mt-2 mb-2">What to do?</p>
+    <ol>
+        <li>1. Open chrome dev tools and check the request in network tab</li>
+        <li>2. What API endpoint is going the request?</li> 
+        <li>3. Reproduce the problem in Postman</li>
+    </ol>
+    <code>{{error.details}}</code>
+    </div>    
+    </div>
+</div>
