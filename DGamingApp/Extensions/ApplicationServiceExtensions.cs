@@ -1,4 +1,7 @@
 ﻿using DGamingApp.Data;
+using DGamingApp.Interfaces;
+using DGamingApp.Repository;
+using DGamingApp.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +19,11 @@ namespace DGamingApp.Extensions
             });
 
             services.AddCors();
+
+            //Repos
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             return services;
         }

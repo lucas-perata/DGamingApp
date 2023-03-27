@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DGamingApp.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using DGamingApp.Dto;
 
 namespace DGamingApp.Controllers
 {
@@ -8,16 +10,18 @@ namespace DGamingApp.Controllers
     public class UsersController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
-        public UsersController(IUserRepository userRepository)
+        private readonly IMapper _mapper;
+
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _userRepository.GetUsers();
+            var users = await _userRepository.GetMembersAsync();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -25,7 +29,7 @@ namespace DGamingApp.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await _userRepository.GetUserById(id);
@@ -33,9 +37,22 @@ namespace DGamingApp.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var userToReturn = _mapper.Map<MemberDto>(user);
+
+            return Ok(userToReturn);
+        }
+
+        [HttpGet("{name}")]
+        public async Task<IActionResult> GetUserByName(string name)
+        {
+            var user = await _userRepository.GetMember(name);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             return Ok(user);
         }
 
-       
+
     }
 }

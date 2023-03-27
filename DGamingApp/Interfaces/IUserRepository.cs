@@ -1,4 +1,5 @@
-﻿using DGamingApp.Entities;
+﻿using DGamingApp.Dto;
+using DGamingApp.Entities;
 
 namespace DGamingApp.Interfaces
 {
@@ -6,5 +7,10 @@ namespace DGamingApp.Interfaces
     {
         Task<IEnumerable<AppUser>> GetUsers();
         Task<AppUser> GetUserById(int id);
+        Task<AppUser> GetUserByName(string name);
+        void Update(AppUser user);
+        Task<bool> SaveAllAsync();
+        Task<MemberDto> GetMember(string username);
+        Task<IEnumerable<MemberDto>> GetMembersAsync();
     }
 }
