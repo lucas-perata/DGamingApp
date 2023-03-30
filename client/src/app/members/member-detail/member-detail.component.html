@@ -1,1 +1,50 @@
-<p>member-detail works!</p>
+<div class="flex gap-8">
+    <div *ngIf="member" class="card border flex shadow-md">
+        <div class="self-center p-4">
+            <img src="{{member.photoUrl}}" alt="{{member.knownAs}}" class="rounded-xl shadow-lg" style="width: 15rem"> 
+        </div>
+        <div class="p-4 grid gap-4">
+            <div>
+                <strong>Location:</strong>
+                <p>{{member.city}}</p>
+            </div>
+            <div>
+                <strong>Age:</strong>
+                <p>{{member.age}}</p>
+            </div>
+            <div>
+                <strong>Last active:</strong>
+                <p>{{member.lastActive}}</p>
+            </div>
+            <div>
+                <strong>Member since:</strong>
+                <p>{{member.created}}</p>
+            </div>
+            <div>
+                <strong>Favorite games:</strong>
+                <p>{{member.favoriteGames}}</p>
+            </div>
+        </div> 
+        <div class="card-actions flex justify-center p-5">
+            <button class="btn bg-secondary hover:bg-secondary-accent">Like</button>
+            <button class="btn bg-accent hover:bg-accent-focus">Message</button>
+        </div>
+    </div>
+    <div class="" style="max-width: 50rem; min-width: 50rem;">
+        <mat-tab-group>
+            <mat-tab label="About {{member?.knownAs}}"> 
+                <h3 class="font-bold text-xl">Description</h3>
+                <p>{{member?.introduction}} </p> 
+            </mat-tab>
+            <mat-tab label="Interests"> 
+                <h3 class="font-bold text-xl">Favorite games</h3>
+                <p>{{member?.favoriteGames}}</p>
+            </mat-tab>
+            <mat-tab label="Photos"> 
+                <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery"></ngx-gallery>    
+            </mat-tab>
+            <mat-tab label="Messages">  </mat-tab>
+          </mat-tab-group>
+    </div>
+</div>
+
