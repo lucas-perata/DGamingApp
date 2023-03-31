@@ -1,10 +1,7 @@
 <section  *ngIf="member">
     <div>
-        <div>
-            <h1 class="text-2xl"><strong>Your profile</strong></h1>
-        </div>
-        <div class="alert" *ngIf="editForm.dirty">
-            <p><strong>Information: </strong> You have made changes. Any unsaved changes will be lost</p>
+        <div class="alert mb-4" *ngIf="editForm.dirty">
+            <p> You have made changes. Any unsaved changes will be lost</p>
         </div>
     </div>
     <div class="flex gap-8">

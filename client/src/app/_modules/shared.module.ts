@@ -4,6 +4,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule} from '@angular/common/http';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+import {NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -11,10 +12,17 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
   imports: [
     CommonModule,
     BrowserAnimationsModule,
+    NgxSpinnerModule.forRoot({
+      type: "ball-fussion",
+    }      
+    ),
     [ HttpClientModule, NgxGalleryModule ],
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right'
     })
+  ],
+  exports: [
+    NgxSpinnerModule
   ]
 })
 export class SharedModule { }

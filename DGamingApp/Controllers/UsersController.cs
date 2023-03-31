@@ -3,6 +3,7 @@ using DGamingApp.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using DGamingApp.Dto;
+using System.Security.Claims;
 
 namespace DGamingApp.Controllers
 {
@@ -51,6 +52,23 @@ namespace DGamingApp.Controllers
                 return BadRequest(ModelState);
 
             return Ok(user);
+        }
+
+        [HttpPut] 
+        public async Task<IActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+        {
+            var username = User.FindFirst(ClaimTypes.Name)?.Value; // Get username from token (JWT)
+            if (username == null) return BadRequest("Not found");
+
+            var user = await _userRepository.GetUserByName(username);
+
+            if (user == null) return BadRequest("Not found"); 
+
+            _mapper.Map(memberUpdateDto, user);
+
+            if (await _userRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Failed to update user");
         }
 
 
