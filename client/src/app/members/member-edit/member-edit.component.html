@@ -1,0 +1,67 @@
+<section  *ngIf="member">
+    <div>
+        <div class="alert mb-4" *ngIf="editForm.dirty">
+            <p> You have made changes. Any unsaved changes will be lost</p>
+        </div>
+    </div>
+    <div class="flex gap-8">
+        <div class="card border flex shadow-md">
+            <div class="self-center p-4">
+                <img src="{{member.photoUrl}}" alt="{{member.knownAs}}" class="rounded-xl shadow-lg" style="width: 15rem"> 
+            </div>
+            <div class="p-4 grid gap-4">
+                <div>
+                    <strong>Location:</strong>
+                    <p>{{member.city}}</p>
+                </div>
+                <div>
+                    <strong>Age:</strong>
+                    <p>{{member.age}}</p>
+                </div>
+                <div>
+                    <strong>Last active:</strong>
+                    <p>{{member.lastActive}}</p>
+                </div>
+                <div>
+                    <strong>Member since:</strong>
+                    <p>{{member.created}}</p>
+                </div>
+                <div>
+                    <strong>Favorite games:</strong>
+                    <p>{{member.favoriteGames}}</p>
+                </div>
+            </div> 
+            <div class="card-actions flex justify-center p-5"  >
+                <button type="submit" form="editForm" class="btn bg-accent hover:bg-accent-focus" [disabled]="!editForm.dirty" >Save changes</button>
+            </div>
+        </div>
+        <div class="" style="max-width: 50rem; min-width: 50rem;">
+            <mat-tab-group>
+                <mat-tab label="About {{member.knownAs}}"> 
+                    <form #editForm="ngForm" (ngSubmit)="updateMember()" id="editForm" class="grid gap-1 p-2">
+                        <h3 class="font-bold text-xl">Description</h3>
+                        <textarea class="textarea textarea-bordered" [(ngModel)]="member.introduction" name="introduction" rows="6"></textarea>
+                        <h3 class="font-bold text-xl">Interests</h3>
+                        <textarea class="textarea textarea-bordered" [(ngModel)]="member.interests" name="interests" ></textarea>
+                        <h3 class="font-bold text-xl">Looking for</h3>
+                        <textarea class="textarea textarea-bordered" [(ngModel)]="member.lookingFor" name="lookingFor" rows="3"></textarea>
+                        <h3 class="font-bold text-xl">Favorite games</h3>
+                        <input type="text" [(ngModel)]="member.favoriteGames" name="favoriteGames" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+                        <h3 class="font-bold text-xl">Location details:</h3>
+                        <div class="flex-row">
+                            <label for="city" class="m-3">City:</label>
+                            <input type="text" [(ngModel)]="member.city" name="city" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+                            <label for="country" class="m-3">Country:</label>
+                            <input type="text" [(ngModel)]="member.country" name="country" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Edit photos"> 
+                </mat-tab>
+                <mat-tab label="Messages">  </mat-tab>
+              </mat-tab-group>
+        </div>
+    </div>
+    
+    
+</section>

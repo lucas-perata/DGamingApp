@@ -63,13 +63,11 @@ namespace DGamingApp.Controllers
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
             }
 
-            var userLogged = new UserDto
+            return new UserDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token =  _tokenService.CreateToken(user)
             };
-
-            return (userLogged);
         }
     }
 }

@@ -13,7 +13,7 @@
     <div class="dropdown dropdown-end dropdown-hover m-1" *ngIf="(accountService.currentUser$ | async) as user">
       <label tabindex="0" class="btn bg-accent hover:bg-accent-focus m-1">{{user.username}}</label>
       <ul tabindex="0" class="bg-accent dropdown-content menu p-2 shadow  rounded-box w-52">
-        <li><a>Edit profile</a></li>
+        <li><a routerLink="/member/edit">Edit profile</a></li>
         <li><a (click)="logout()">Logout</a></li>
       </ul>
     </div>
