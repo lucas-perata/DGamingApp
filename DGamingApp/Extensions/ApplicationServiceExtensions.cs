@@ -1,11 +1,10 @@
 ﻿using DGamingApp.Data;
+using DGamingApp.Helpers;
 using DGamingApp.Interfaces;
 using DGamingApp.Repository;
 using DGamingApp.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+
 
 namespace DGamingApp.Extensions
 {
@@ -23,7 +22,10 @@ namespace DGamingApp.Extensions
             //Repos
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
 
             return services;
         }
