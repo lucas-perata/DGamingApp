@@ -100,7 +100,10 @@ namespace DGamingApp.Controllers
 
             user.Photos.Add(photo); 
 
-            if(await _userRepository.SaveAllAsync()) return _mapper.Map<PhotoDto>(photo); 
+            if(await _userRepository.SaveAllAsync()) 
+            {
+                return CreatedAtAction(nameof(GetUserByName), new {name = user.UserName}, _mapper.Map<PhotoDto>(photo));
+            }
 
             return BadRequest("Error adding the photo"); 
         } 
