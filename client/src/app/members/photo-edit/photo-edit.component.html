@@ -1,10 +1,10 @@
 <div *ngIf="member">
     <div>
-        <div *ngFor="let photo of member.photos">
-            <img src="{{photo.url}}" alt="photo of user" class="mb-1">
-            <div class="text-center">
-                <button class="btn">Main</button>
-                <button class="btn btn-warning"> <i class="fa fa-trash"></i></button>
+        <div class="flex flex-col justify-center items-center" *ngFor="let photo of member.photos">
+            <img src="{{photo.url}}" alt="photo of user" class="mb-1 mt-2 rounded-xl">
+            <div class="">
+                <button [disabled]="photo.isMain" (click)="setMainPhoto(photo)" [ngClass]="photo.isMain ? 'btn bg-accent' : 'btn bg-accent hover:bg-accent-focus border-accent hover:border-accent-focus'">Main</button>
+                <button [disabled]="photo.isMain" (click)="deletePhoto(photo.id)" class="btn btn-error"> <i class="fa fa-trash"></i></button>
             </div>
         </div>
     </div>
