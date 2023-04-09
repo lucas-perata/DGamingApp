@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule} from '@angular/common/http';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import {NgxSpinnerModule } from 'ngx-spinner';
+import { FileUploadModule } from 'ng2-file-upload';
 
 
 @NgModule({
@@ -16,13 +17,15 @@ import {NgxSpinnerModule } from 'ngx-spinner';
       type: "ball-fussion",
     }      
     ),
+    FileUploadModule,
     [ HttpClientModule, NgxGalleryModule ],
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right'
     })
   ],
   exports: [
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    FileUploadModule
   ]
 })
 export class SharedModule { }

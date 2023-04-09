@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using DGamingApp.Dto;
 using System.Security.Claims;
+using DGamingApp.Entities;
+using DGamingApp.Extensions;
 
 namespace DGamingApp.Controllers
 {
@@ -12,11 +14,13 @@ namespace DGamingApp.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IPhotoService _photoService;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper)
+        public UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _photoService = photoService;
         }
 
         [HttpGet]
@@ -57,7 +61,7 @@ namespace DGamingApp.Controllers
         [HttpPut] 
         public async Task<IActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
-            var username = User.FindFirst(ClaimTypes.Name)?.Value; // Get username from token (JWT)
+            var username = User.GetUsername(); // Get username from token (JWT)
             if (username == null) return BadRequest("Not found");
 
             var user = await _userRepository.GetUserByName(username);
@@ -71,6 +75,88 @@ namespace DGamingApp.Controllers
             return BadRequest("Failed to update user");
         }
 
+        [HttpPost("add-photo")]
+        public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+        {
+            var username = User.GetUsername();
+
+            if (username == null) return NotFound();
+
+            var user = await _userRepository.GetUserByName(username); 
+
+            if(user == null) return NotFound();  
+
+            var result = await _photoService.AddPhotoAsync(file); 
+
+            if(result.Error != null) return BadRequest(result.Error.Message); 
+
+            var photo = new Photo 
+            {
+                Url = result.SecureUrl.AbsoluteUri, 
+                PublicId = result.PublicId
+            }; 
+
+            if(user.Photos.Count == 0) photo.IsMain = true;
+
+            user.Photos.Add(photo); 
+
+            if(await _userRepository.SaveAllAsync()) 
+            {
+                return CreatedAtAction(nameof(GetUserByName), new {name = user.UserName}, _mapper.Map<PhotoDto>(photo));
+            }
+
+            return BadRequest("Error adding the photo"); 
+        } 
+
+        [HttpPut("set-main-photo/{photoId}")] 
+
+        public async Task<ActionResult> SetMainPhoto(int photoId) 
+        {
+            var user = await _userRepository.GetUserByName(User.GetUsername()); 
+
+            if (user == null) return NotFound(); 
+
+            var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+
+            if (photo == null) return NotFound(); 
+
+            if (photo.IsMain) return BadRequest("This is already main photo");
+
+            var currentMain = user.Photos.FirstOrDefault(x => x.IsMain); 
+
+            if (currentMain != null) currentMain.IsMain = false; 
+            photo.IsMain = true; 
+
+            if(await _userRepository.SaveAllAsync()) return NoContent(); 
+
+            return BadRequest("Problem setting main photo");
+        }
+
+        [HttpDelete("delete-photo/{photoId}")] 
+        public async Task<ActionResult> DeletePhoto(int photoId) 
+        {
+            var user = await _userRepository.GetUserByName(User.GetUsername()); 
+
+            if (user == null) return NotFound(); 
+
+            var photo = user.Photos.FirstOrDefault(p => p.Id == photoId); 
+
+            if (photo == null) return NotFound(); 
+
+            if (photo.IsMain) return BadRequest("You cannot delete your main photo"); 
+
+            if (photo.PublicId != null) 
+            {
+                var result = await _photoService.DeletePhotoAsync(photo.PublicId); 
+                if(result.Error != null) return BadRequest(result.Error.Message); 
+            }
+
+            user.Photos.Remove(photo); 
+
+            if(await _userRepository.SaveAllAsync()) return Ok();
+
+            return BadRequest("There was a problem deleting the photo");
+        }
 
     }
 }
