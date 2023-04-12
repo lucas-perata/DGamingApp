@@ -1,5 +1,6 @@
 ﻿using DGamingApp.Dto;
 using DGamingApp.Entities;
+using DGamingApp.Helpers;
 
 namespace DGamingApp.Interfaces
 {
@@ -11,6 +12,6 @@ namespace DGamingApp.Interfaces
         void Update(AppUser user);
         Task<bool> SaveAllAsync();
         Task<MemberDto> GetMember(string username);
-        Task<IEnumerable<MemberDto>> GetMembersAsync();
+        Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams);
     }
 }
