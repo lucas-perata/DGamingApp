@@ -11,5 +11,8 @@ namespace DGamingApp.Helpers
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value; 
         }
         
+        public string? CurrentUsername {get; set;}
+
+        public string? Gender { get; set; }
     }
 }
