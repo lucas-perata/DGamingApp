@@ -11,7 +11,7 @@
     (page)="handlePageEvent($event)"
     [(ngModel)]=" pagination.currentPage"
     [length]="pagination.totalItems"
-    [pageSize]="this.pageSize"
+    [pageSize]="this.userParams?.pageSize"
     [disabled]="disabled"
     [showFirstLastButtons]="showFirstLastButtons"
     [pageIndex]="pageIndex"

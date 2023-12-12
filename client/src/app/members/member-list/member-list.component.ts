@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { take } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { Member } from 'src/app/_models/member';
 import { PaginatedResults, Pagination } from 'src/app/_models/pagination';
+import { User } from 'src/app/_models/user';
+import { UserParams } from 'src/app/_models/userParams';
+import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
 
 @Component({
@@ -14,8 +18,8 @@ export class MemberListComponent {
   members: Member[] = []; 
   pageEvent: PageEvent | undefined;
   pagination: Pagination | undefined;
-  pageNumber = 1; 
-  pageSize = 5; 
+  userParams: UserParams | undefined; 
+  user: User | undefined; 
   pageIndex = 0; 
   hidePageSize = false;
   showPageSizeOptions = true;
@@ -23,14 +27,24 @@ export class MemberListComponent {
   disabled = false;
 
 
-  constructor(private memberService: MembersService) {}
+  constructor(private memberService: MembersService, private accountService: AccountService) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user => {
+        if (user){
+          this.userParams = new UserParams(user);
+          this.user = user; 
+        }
+      }
+    })
+  }
 
   ngOnInit(): void {
     this.loadMembers(); 
   }
 
   loadMembers() {
-    this.memberService.getMembers(this.pageNumber, this.pageSize).subscribe({
+    if (!this.userParams) return; 
+    this.memberService.getMembers(this.userParams).subscribe({
       next: response => {
         if (response.result && response.pagination) {
           this.members = response.result; 
@@ -41,11 +55,14 @@ export class MemberListComponent {
   }
   
   handlePageEvent(e: PageEvent) {
+    if (this.userParams && this.userParams?.pageNumber !== e.pageIndex)
+    {
     this.pageEvent = e;
-    this.pageSize = e.pageSize;
+    this.userParams.pageSize = e.pageSize;
     this.pageIndex = 1;
-    this.pageNumber = e.pageIndex + 1;
+    this.userParams.pageNumber = e.pageIndex + 1;
     this.loadMembers();
+    }
   }
 
 
