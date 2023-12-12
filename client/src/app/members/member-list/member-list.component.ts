@@ -25,6 +25,7 @@ export class MemberListComponent {
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   disabled = false;
+  genderList = [{value: 'male', display: "Males"}, {value: 'female', display: "Females"}]; 
 
 
   constructor(private memberService: MembersService, private accountService: AccountService) {
@@ -52,6 +53,13 @@ export class MemberListComponent {
         }
       }
     })
+  }
+
+  resetFilters(){
+    if (this.user){
+      this.userParams = new UserParams(this.user); 
+      this.loadMembers(); 
+    }
   }
   
   handlePageEvent(e: PageEvent) {
