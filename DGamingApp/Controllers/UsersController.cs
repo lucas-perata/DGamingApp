@@ -6,6 +6,7 @@ using DGamingApp.Dto;
 using System.Security.Claims;
 using DGamingApp.Entities;
 using DGamingApp.Extensions;
+using DGamingApp.Helpers;
 
 namespace DGamingApp.Controllers
 {
@@ -24,9 +25,20 @@ namespace DGamingApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<PagedList<MemberDto>>> GetAll([FromQuery]UserParams userParams)
         {
-            var users = await _userRepository.GetMembersAsync();
+            var currentUser = await _userRepository.GetUserByName(User.GetUsername()); 
+            userParams.CurrentUsername = currentUser.UserName;
+
+            if (string.IsNullOrEmpty(userParams.Gender)) 
+            {
+                userParams.Gender = currentUser.Gender == "male" ? "female" : "male";
+            }
+
+            var users = await _userRepository.GetMembersAsync(userParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, 
+            users.TotalCount, users.TotalPages));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
