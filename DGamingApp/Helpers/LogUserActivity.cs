@@ -12,10 +12,10 @@ namespace DGamingApp.Helpers
 
             if (!resultContext.HttpContext.User.Identity.IsAuthenticated) return; 
 
-            var username = resultContext.HttpContext.User.GetUsername();
+            var id = resultContext.HttpContext.User.GetUserId();
 
             var repo = resultContext.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-            var user = await repo.GetUserByName(username);
+            var user = await repo.GetUserById(int.Parse(id));
             user.LastActive = DateTime.UtcNow;
             await repo.SaveAllAsync();
         }
