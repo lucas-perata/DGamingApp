@@ -9,6 +9,7 @@ import { UserParams } from 'src/app/_models/userParams';
 import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
 
+
 @Component({
   selector: 'app-member-list',
   templateUrl: './member-list.component.html',
@@ -26,6 +27,7 @@ export class MemberListComponent {
   showFirstLastButtons = true;
   disabled = false;
   genderList = [{value: 'male', display: "Males"}, {value: 'female', display: "Females"}]; 
+  orderByList = [{value: "lastActive", display: "Last active"}, {value: "created", display: "New members"}];
 
 
   constructor(private memberService: MembersService, private accountService: AccountService) {
