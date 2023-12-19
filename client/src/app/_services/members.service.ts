@@ -36,6 +36,32 @@ export class MembersService {
     )
   }
 
+  getMember(name: string) {
+    const member = [...this.memberCache.values()]
+    .reduce((arr, element) => arr.concat(element.result), [])
+    .find((member: Member) => member.userName === name); 
+
+    if (member) return of(member); 
+    return this.http.get<Member>(this.baseUrl + "users/" + name)
+  }
+
+  updateMember(member: Member) {
+    return this.http.put(this.baseUrl + "users", member).pipe(
+      map(() => {
+        const index = this.members.indexOf(member);
+        this.members[index] = {...this.members[index], ...member}
+      } )
+    )
+  }
+
+  setMainPhoto(photoId: number) {
+    return this.http.put(this.baseUrl + "users/set-main-photo/" + photoId, {});
+  }
+
+  deletePhoto(photoId: number) {
+    return this.http.delete(this.baseUrl + "users/delete-photo/" + photoId);
+  }
+
   private getPaginatedResult<T>(url: string, params: HttpParams) {
     const paginatedResult: PaginatedResults<T> = new PaginatedResults<T>;
     return this.http.get<T>(url, { observe: 'response', params }).pipe(
@@ -59,28 +85,5 @@ export class MembersService {
       params = params.append('pageSize', pageSize);
     
       return params;
-  }
-
-  getMember(name: string) {
-    const member = this.members.find(x => x.userName === name); 
-    if(member) return of(member);
-    return this.http.get<Member>(this.baseUrl + "users/" + name)
-  }
-
-  updateMember(member: Member) {
-    return this.http.put(this.baseUrl + "users", member).pipe(
-      map(() => {
-        const index = this.members.indexOf(member);
-        this.members[index] = {...this.members[index], ...member}
-      } )
-    )
-  }
-
-  setMainPhoto(photoId: number) {
-    return this.http.put(this.baseUrl + "users/set-main-photo/" + photoId, {});
-  }
-
-  deletePhoto(photoId: number) {
-    return this.http.delete(this.baseUrl + "users/delete-photo/" + photoId);
   }
 }
