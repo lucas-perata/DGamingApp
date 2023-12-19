@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, ViewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { take } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { Member } from 'src/app/_models/member';
@@ -14,28 +14,23 @@ import { MembersService } from 'src/app/_services/members.service';
   templateUrl: './member-list.component.html',
   styleUrls: ['./member-list.component.css']
 })
+
 export class MemberListComponent {
   members: Member[] = []; 
   pageEvent: PageEvent | undefined;
   pagination: Pagination | undefined;
   userParams: UserParams | undefined; 
-  user: User | undefined; 
   pageIndex = 0; 
   hidePageSize = false;
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   disabled = false;
+  genderList = [{value: 'male', display: "Males"}, {value: 'female', display: "Females"}]; 
+  orderByList = [{value: "lastActive", display: "Last active"}, {value: "created", display: "New members"}];
 
 
-  constructor(private memberService: MembersService, private accountService: AccountService) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: user => {
-        if (user){
-          this.userParams = new UserParams(user);
-          this.user = user; 
-        }
-      }
-    })
+  constructor(private memberService: MembersService) {
+    this.userParams = this.memberService.getUserParams();
   }
 
   ngOnInit(): void {
@@ -43,25 +38,31 @@ export class MemberListComponent {
   }
 
   loadMembers() {
-    if (!this.userParams) return; 
-    this.memberService.getMembers(this.userParams).subscribe({
-      next: response => {
-        if (response.result && response.pagination) {
-          this.members = response.result; 
-          this.pagination = response.pagination;
+    if (this.userParams) {
+      this.memberService.setUserParams(this.userParams);
+      this.memberService.getMembers(this.userParams).subscribe({
+        next: response => {
+          if (response.result && response.pagination) {
+            this.members = response.result; 
+            this.pagination = response.pagination;
+          }
         }
-      }
-    })
+      })
+    }  
+  }
+
+  resetFilters(){
+      this.userParams = this.memberService.resetUserParams(); 
+      this.loadMembers(); 
   }
   
   handlePageEvent(e: PageEvent) {
-    if (this.userParams && this.userParams?.pageNumber !== e.pageIndex)
+    if (this.userParams)
     {
-    this.pageEvent = e;
-    this.userParams.pageSize = e.pageSize;
-    this.pageIndex = 1;
-    this.userParams.pageNumber = e.pageIndex + 1;
-    this.loadMembers();
+      this.userParams.pageSize = e.pageSize;
+      this.pageIndex = 0;
+      this.userParams.pageNumber = e.pageIndex + 1;
+      this.loadMembers();
     }
   }
 

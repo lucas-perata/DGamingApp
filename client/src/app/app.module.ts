@@ -28,7 +28,8 @@ import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { DatePickerComponent } from './_forms/date-picker/date-picker.component';
 import { MaterialModule } from './material.module';
 import { MAT_DATE_LOCALE} from '@angular/material/core';
-
+import {Component} from '@angular/core';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { MAT_DATE_LOCALE} from '@angular/material/core';
     SharedModule,
     BrowserAnimationsModule,
     MaterialModule,
+    MatButtonToggleModule,
     [ HttpClientModule, NgxGalleryModule ]
   ],
   exports:[ 
