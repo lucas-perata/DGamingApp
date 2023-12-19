@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 # Settings JSON 
 appsettings.json    
+DGamingApp/dgamingapp.db-shm
+DGamingApp/dgamingapp.db-wal
