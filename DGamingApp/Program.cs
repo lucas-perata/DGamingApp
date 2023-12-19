@@ -38,7 +38,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().
+WithOrigins("https://localhost:4200")
+.WithExposedHeaders("Pagination"));
 
 app.MapControllers();
 
