@@ -48,15 +48,13 @@
     </div>
 </div>
 
-<div class="flex justify-center" *ngIf="pagination">
-    <mat-paginator 
-    (page)="handlePageEvent($event)"
-    [(ngModel)]=" pagination.currentPage"
-    [length]="pagination.totalItems"
-    [pageSize]="this.userParams?.pageSize"
-    [disabled]="disabled"
-    [showFirstLastButtons]="showFirstLastButtons"
-    [pageIndex]="pageIndex"
-    >
-    </mat-paginator>    
-</div>
+    <div class="flex justify-center" *ngIf="pagination">
+        <mat-paginator 
+        (page)="handlePageEvent($event)"
+        [(ngModel)]="this.pagination.currentPage"
+        [length]="this.pagination.totalItems"
+        [pageSize]="this.userParams?.pageSize"  
+        [pageIndex]="pageIndex"
+        >
+        </mat-paginator>    
+    </div>
