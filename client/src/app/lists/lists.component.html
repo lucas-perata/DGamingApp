@@ -14,3 +14,14 @@
         </div>
     </div>
 </div>
+
+<div class="flex justify-center" *ngIf="pagination">
+    <mat-paginator 
+    (page)="handlePageEvent($event)"
+    [(ngModel)]="this.pagination.currentPage"
+    [length]="this.pagination.totalItems"
+    [pageSize]="this.pageSize"  
+    [pageIndex]="0"
+    >
+    </mat-paginator>    
+</div>
