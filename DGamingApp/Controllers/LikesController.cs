@@ -1,6 +1,7 @@
 using DGamingApp.Dto;
 using DGamingApp.Entities;
 using DGamingApp.Extensions;
+using DGamingApp.Helpers;
 using DGamingApp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ namespace DGamingApp.Controllers
         [HttpPost("{username}")]
         public async Task<ActionResult> AddLike(string username) 
         {
-            var sourceUserId = int.Parse(User.GetUserId());
+            var sourceUserId = User.GetUserId();
             var likedUser = await _userRepository.GetUserByName(username); 
             var sourceUser = await _likesRepository.GetUserWithLikes(sourceUserId); 
 
@@ -46,9 +47,14 @@ namespace DGamingApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LikeDto>>> GetUsersLikes(string predicate) 
+        public async Task<ActionResult<PagedList<LikeDto>>> GetUsersLikes([FromQuery]LikesParams likesParams) 
         {
-            var users = await _likesRepository.GetUserLikes(predicate, int.Parse(User.GetUserId())); 
+
+            likesParams.UserId = User.GetUserId();
+            
+            var users = await _likesRepository.GetUserLikes(likesParams);  
+
+            Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages)); 
 
             return Ok(users);
         }
