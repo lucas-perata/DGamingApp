@@ -15,7 +15,7 @@ namespace DGamingApp.Helpers
             var id = resultContext.HttpContext.User.GetUserId();
 
             var repo = resultContext.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-            var user = await repo.GetUserById(int.Parse(id));
+            var user = await repo.GetUserById(id);
             user.LastActive = DateTime.UtcNow;
             await repo.SaveAllAsync();
         }

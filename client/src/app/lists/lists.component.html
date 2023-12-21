@@ -1,1 +1,27 @@
-<p>lists works!</p>
+<div class="text-center">
+    <h2>{{predicate === "liked" ? "Members I like" : "Members who like me"}}</h2>
+</div>
+
+<div>
+    <div class="flex">
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="predicate" [value]="predicate" (change)="loadLikes()" name="liked">
+                <mat-radio-button [checked]="true" [(ngModel)]="predicate" value="liked">Members I like</mat-radio-button>
+                <mat-radio-button [(ngModel)]="predicate"  value="likedBy">Members who like me</mat-radio-button>
+              </mat-radio-group>
+    <div>
+        <div *ngFor="let member of members">
+            <app-member-card [member]="member"></app-member-card>
+        </div>
+    </div>
+</div>
+
+<div class="flex justify-center" *ngIf="pagination">
+    <mat-paginator 
+    (page)="handlePageEvent($event)"
+    [(ngModel)]="this.pagination.currentPage"
+    [length]="this.pagination.totalItems"
+    [pageSize]="this.pageSize"  
+    [pageIndex]="0"
+    >
+    </mat-paginator>    
+</div>
