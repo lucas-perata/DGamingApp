@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DGamingApp.Data;
 using DGamingApp.Dto;
 using DGamingApp.Entities;
@@ -48,6 +44,7 @@ namespace DGamingApp.Repository
                 KnownAs = user.KnownAs,
                 Age = user.DateOfBirth.CalculateAge(),
                 PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url, 
+                City = user.City,
                 Id = user.Id                    
             }).ToListAsync(); 
         }
