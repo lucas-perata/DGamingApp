@@ -29,6 +29,7 @@ import { DatePickerComponent } from './_forms/date-picker/date-picker.component'
 import { MaterialModule } from './material.module';
 import { MAT_DATE_LOCALE} from '@angular/material/core';
 import {Component} from '@angular/core';
+import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
@@ -60,6 +61,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     BrowserAnimationsModule,
     MaterialModule,
     MatButtonToggleModule,
+    MatRadioModule,
     [ HttpClientModule, NgxGalleryModule ]
   ],
   exports:[ 
