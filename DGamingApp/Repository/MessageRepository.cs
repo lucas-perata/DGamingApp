@@ -10,6 +10,8 @@ using DGamingApp.Dto;
 using DGamingApp.Entities;
 using DGamingApp.Helpers;
 using DGamingApp.Interfaces;
+using Microsoft.AspNetCore.Builder.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace DGamingApp.Repository
 {
@@ -56,9 +58,34 @@ namespace DGamingApp.Repository
             return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize); 
         }
 
-        public Task<IEnumerable<MessageDto>> GetMessageThread(int currentUserId, int recipientId)
+        public async Task<IEnumerable<MessageDto>> GetMessageThread(string currentUserName, string RecipientUsername)
         {
-            throw new NotImplementedException();
+            var messages = await _context.Messages
+                            .Include(u => u.Sender).ThenInclude(p => p.Photos)
+                            .Include(u => u.Recipient).ThenInclude(p => p.Photos)
+                            .Where(
+                                m => m.RecipientUsername == currentUserName && 
+                                m.SenderUsername == RecipientUsername ||
+                                m.RecipientUsername == RecipientUsername && 
+                                m.SenderUsername == currentUserName
+                             )
+                             .OrderByDescending(m => m.MessageSent)
+                             .ToListAsync(); 
+
+            var unreadMessages = messages.Where(m => m.DateRead == null 
+            && m.RecipientUsername == currentUserName).ToList(); 
+
+            if (unreadMessages.Any())
+            {
+                foreach(var message in unreadMessages)
+                {
+                    message.DateRead = DateTime.UtcNow;
+                }
+
+                await _context.SaveChangesAsync(); 
+            }
+
+            return _mapper.Map<IEnumerable<MessageDto>>(messages); 
         }
 
         public async Task<bool> SaveAllAsync()
