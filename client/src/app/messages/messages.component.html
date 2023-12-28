@@ -1,1 +1,57 @@
-<p>messages works!</p>
+<div>
+    <mat-radio-group aria-label="Select an option" [(ngModel)]="container" [value]="container" (change)="loadMessages()">
+        <mat-radio-button [checked]="true" [(ngModel)]="container" value="Unread">Unread</mat-radio-button>
+        <mat-radio-button [(ngModel)]="container"  value="Inbox">Inbox</mat-radio-button>
+        <mat-radio-button [(ngModel)]="container"  value="Outbox"> Sent</mat-radio-button>
+    </mat-radio-group>
+<div>
+
+<div [hidden]="messages">
+    <h3>No messages</h3>
+</div>
+
+
+<div *ngIf="messages">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 40%;">Message</th>
+                <th *ngIf="container === 'Outbox'" style="width: 20%">To</th>
+                <th *ngIf="container !== 'Outbox'" style="width: 20%">From</th>
+                <th style="width: 20%;">Sent / Received</th>
+                <th style="width: 20%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="hover:bg-gray-100 shadow-sm" [hidden]="loading" *ngFor="let message of messages">    
+                    <td   [queryParams]="{tab: 'Messages'}"
+                    routerLink="{{container === 'Outbox' ? '/members/' + message.recipientUsername : '/members/' + message.senderUsername}}" >{{message.content}}</td>
+                <td>
+                    <div *ngIf="container === 'Outbox'">
+                        <img class="w-16 mask mask-squircle" src="{{message.recipientPhotoUrl}}" alt="recipient-photo">
+                        <strong>{{message.recipientUsername}} </strong>
+                    </div>
+                    <div *ngIf="container !== 'Outbox'">
+                        <img class="w-16 mask mask-squircle" src="{{message.senderPhotoUrl}}" alt="sender-photo">
+                        <strong>{{message.senderUsername}}</strong> 
+                    </div>
+                </td>
+                <td>{{(message.messageSent | date: "mediumTime")}}</td>
+            <td>
+                <button (click)="$event.stopPropagation" (click)="deleteMessage(message.id)" class="btn bg-red-500 text-white">Delete 1</button>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div [hidden]="loading" class="flex justify-center" *ngIf="pagination && messages!.length > pagination.itemsPerPage" >
+    <mat-paginator 
+    (page)="handlePageEvent($event)"
+    [(ngModel)]="this.pagination.currentPage"
+    [length]="this.pagination.totalItems"
+    [pageSize]="this.pageSize"  
+    [pageIndex]="0"
+    >
+    </mat-paginator>    
+</div>

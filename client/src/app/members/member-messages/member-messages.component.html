@@ -1,0 +1,64 @@
+<div>
+    <div *ngIf="messages.length === 0">
+        No messages yet...say hi
+    </div> 
+    <ul *ngIf="messages.length > 0" class="p-5"> 
+        <li *ngFor="let message of messages">
+            <div *ngIf="message.senderUsername === this.username" class="">
+                <!-- Left chat -->
+                <div class="chat chat-start">
+                    <div class="chat-image avatar">
+                      <div class="w-10 rounded-full">
+                        <img alt="img-user" src="{{message.senderPhotoUrl}}" />
+                      </div>
+                    </div>
+                    <div class="chat-header">
+                    {{message.senderUsername}}
+                      <time class="text-xs opacity-50">{{message.messageSent + 'Z' | timeago}}</time>
+                    </div>
+                    <div class="chat-bubble" *ngIf="message.senderUsername === this.username">{{message.content}}</div>
+                    <div *ngIf="message.dateRead && message.senderUsername !== this.username" class="chat-footer opacity-50">
+                      Seen
+                    </div>
+                    <div *ngIf="!message.dateRead && message.senderUsername !== this.username" class="chat-footer opacity-50">
+                        Delivered
+                    </div>
+                  </div> 
+            </div> 
+            <div *ngIf="message.senderUsername !== this.username">
+                <!-- Right chat -->
+                <div class="chat chat-end">
+                    <div class="chat-image avatar">
+                      <div class="w-10 rounded-full">
+                        <img alt="img-user" src="{{message.senderPhotoUrl}}" />
+                      </div>
+                    </div>
+                    <div class="chat-header">
+                    {{"Me"}}
+                      <span class="text-xs opacity-50">{{message.messageSent + 'Z' | timeago}}</span>
+                    </div>
+                    <div class="chat-bubble" *ngIf="message.senderUsername !== this.username">{{message.content}}</div>
+                    <div *ngIf="!message.dateRead && message.senderUsername !== this.username" class="chat-footer opacity-50">
+                        Delivered
+                    </div>
+                    <div *ngIf="message.dateRead && message.senderUsername !== this.username" class="chat-footer opacity-50">
+                      Seen
+                    </div>
+                  </div> 
+            </div>
+        </li>
+    </ul>
+    <div class="card-footer w-100 bg-gray-200">
+        <form #messageForm="ngForm" class="flex p-4" (ngSubmit)="sendMessage()" autocomplete="off">
+            <input type="text" 
+            name="messageContent" 
+            required 
+            [(ngModel)]="messageContent"
+            placeholder="Send a message to {{this.username}}" 
+            class="input w-full" /> 
+            <button type="submit" class="btn ml-3" [disabled]="!messageForm.valid">
+                Send
+            </button>
+        </form>
+    </div>
+</div>

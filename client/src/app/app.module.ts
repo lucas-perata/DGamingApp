@@ -28,9 +28,11 @@ import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { DatePickerComponent } from './_forms/date-picker/date-picker.component';
 import { MaterialModule } from './material.module';
 import { MAT_DATE_LOCALE} from '@angular/material/core';
-import {Component} from '@angular/core';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
+import { TimeagoIntl, TimeagoFormatter, TimeagoCustomFormatter } from "ngx-timeago";
+
 
 @NgModule({
   declarations: [
@@ -39,7 +41,6 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     HomeComponent,
     RegisterComponent,
     MemberListComponent,
-    MemberDetailComponent,
     ListsComponent,
     MessagesComponent,
     TestErrorComponent,
@@ -49,10 +50,12 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MemberEditComponent,
     PhotoEditComponent,
     TextInputComponent,
-    DatePickerComponent
+    DatePickerComponent 
   ],
   imports: [
     BrowserModule,
+    MatTabsModule,
+    MemberDetailComponent,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
@@ -62,7 +65,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MaterialModule,
     MatButtonToggleModule,
     MatRadioModule,
-    [ HttpClientModule, NgxGalleryModule ]
+    [ HttpClientModule, NgxGalleryModule ], 
   ],
   exports:[ 
     ToastrModule, 

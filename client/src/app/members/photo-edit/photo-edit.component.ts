@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
@@ -21,7 +21,7 @@ export class PhotoEditComponent {
   user: User | undefined; 
   photo: Photo | undefined;
   
-  constructor(private accountService: AccountService, private memberService: MembersService) {
+  constructor(private accountService: AccountService,@Inject(MembersService) private memberService: MembersService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if (user) this.user = user

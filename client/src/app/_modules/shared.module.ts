@@ -6,6 +6,7 @@ import { HttpClientModule} from '@angular/common/http';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import {NgxSpinnerModule } from 'ngx-spinner';
 import { FileUploadModule } from 'ng2-file-upload';
+import { TimeagoModule } from 'ngx-timeago';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { FileUploadModule } from 'ng2-file-upload';
   imports: [
     CommonModule,
     BrowserAnimationsModule,
+    TimeagoModule.forRoot(),
     NgxSpinnerModule.forRoot({
       type: "ball-fussion",
     }      
@@ -25,7 +27,8 @@ import { FileUploadModule } from 'ng2-file-upload';
   ],
   exports: [
     NgxSpinnerModule,
-    FileUploadModule
+    FileUploadModule,
+    TimeagoModule
   ]
 })
 export class SharedModule { }

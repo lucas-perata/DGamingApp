@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { take } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
@@ -29,7 +29,7 @@ export class MemberListComponent {
   orderByList = [{value: "lastActive", display: "Last active"}, {value: "created", display: "New members"}];
 
 
-  constructor(private memberService: MembersService) {
+  constructor(@Inject(MembersService) private memberService: MembersService) {
     this.userParams = this.memberService.getUserParams();
   }
 
