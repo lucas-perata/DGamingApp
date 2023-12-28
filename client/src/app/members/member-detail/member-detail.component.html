@@ -1,4 +1,4 @@
-<div *ngIf="member" class="flex gap-8">
+<div class="flex gap-8">
     <div class="card border flex shadow-md">
         <div class="self-center p-4">
             <img src="{{member.photoUrl}}" alt="{{member.knownAs}}" class="rounded-xl shadow-lg" style="width: 15rem"> 
@@ -27,22 +27,22 @@
         </div> 
         <div class="card-actions flex justify-center p-5">
             <button class="btn bg-secondary hover:bg-secondary-accent">Like</button>
-            <button class="btn bg-accent hover:bg-accent-focus">Message</button>
+            <button (click)="navigateToTabByLabel('Messages')" class="btn bg-accent hover:bg-accent-focus"> Message </button>
         </div>
     </div>
     <div class="" style="max-width: 50rem; min-width: 50rem;">
-        <mat-tab-group (selectedTabChange)="onTabActivated($event)">
+        <mat-tab-group (selectedTabChange)="onTabActivated($event)"  >
             <mat-tab label="About {{member.knownAs}}"> 
                 <h3 class="font-bold text-xl">Description</h3>
                 <p>{{member.introduction}} </p> 
             </mat-tab>
-            <mat-tab label="Interests"> 
+            <mat-tab label="Interests" focusTab> 
                 <h3 class="font-bold text-xl">Favorite games</h3>
                 <p>{{member.favoriteGames}}</p>
                 <h3 class="font-bold text-xl">Interests</h3>
                 <p>{{member.interests}}</p>
             </mat-tab>
-            <mat-tab label="Photos"> 
+            <mat-tab label="Photos" > 
                 <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery h-full"></ngx-gallery>    
             </mat-tab>
             <mat-tab label="Messages" > 

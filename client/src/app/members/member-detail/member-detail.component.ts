@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef, Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryModule, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { Member } from 'src/app/_models/member';
 import { MembersService } from 'src/app/_services/members.service';
@@ -18,19 +18,36 @@ import { Message } from 'src/app/_models/message';
   imports:[MemberMessagesComponent, CommonModule, MatTabsModule, NgxGalleryModule]
 })
 export class MemberDetailComponent {
-  @ViewChild('memberTabs') memberTabs?: MatTab; 
-  member: Member | undefined;
+  @ViewChild(MatTabGroup) memberTabs?: MatTabGroup;
+  @ViewChildren(MatTab) matTabs?: QueryList<MatTab>;
+  member: Member = {} as Member;
   galleryOptions: NgxGalleryOptions[] = []; 
   galleryImages: NgxGalleryImage[] = []; 
   activeTab?: MatTab | undefined; 
   messages: Message[] = [];
+  changeTab?: MatTabChangeEvent;
+  matTabGroup?: MatTabGroup;
 
+  constructor(private memberService : MembersService, private route: ActivatedRoute, private messageService: MessageService ) {} 
 
-  constructor(private memberService : MembersService, private route: ActivatedRoute, private messageService: MessageService) {} 
+  ngAfterViewInit(): void {
+    // Check if the tabGroup and tabs are initialized
+    if (this.memberTabs && this.matTabs) {
+      // Call navigateToTabByLabel here if needed
+      this.route.queryParams.subscribe({
+        next: params => {
+          this.navigateToTabByLabel(params['tab']) 
+          const tabLabel = params['tab'];}}
+          )}
+   }
+  
 
   ngOnInit(): void {
-    this.loadMember();
+    this.route.data.subscribe({
+      next: data => this.member = data['member'] 
+    }); 
 
+    this.getImages(); 
     // options for ngx photos 
     this.galleryOptions = [
       {
@@ -42,7 +59,7 @@ export class MemberDetailComponent {
         preview: false
       }
     ]
-  }
+  }  
 
   getImages(){
     if(!this.member) return []; 
@@ -58,17 +75,6 @@ export class MemberDetailComponent {
     return imageUrls;
   }
 
-  loadMember() {
-    const username = this.route.snapshot.paramMap.get("username");
-    if(!username) return
-    this.memberService.getMember(username).subscribe({
-      next: member => {this.member = member; 
-            // get photos of members
-    this.galleryImages = this.getImages(); 
-      }
-    })
-  }
-
   loadMessages() {
     if (this.member?.userName) {
       this.messageService.getMessageThread(this.member.userName).subscribe({
@@ -80,13 +86,18 @@ export class MemberDetailComponent {
   onTabActivated(data: MatTabChangeEvent) {
     this.activeTab = data.tab; 
     if(this.activeTab.textLabel ==='Messages') {this.loadMessages()}; 
+  } 
+
+  // Method to navigate to a tab based on its label
+  navigateToTabByLabel(label: string) {
+    if (this.matTabs) {
+      const tabToNavigate = this.matTabs.find((tab) => tab.textLabel === label);
+
+      if (tabToNavigate) {
+        const tabIndex = this.matTabs.toArray().indexOf(tabToNavigate);
+        this.memberTabs!.selectedIndex = tabIndex;
+      }
+    }
   }
 
-  onTabChange(event: MatTabChangeEvent): void {
-    const selectedTabIndex = event.index;
-    const selectedTabLabel = event.tab.textLabel;
-
-    console.log(`Selected Tab Index: ${selectedTabIndex}`);
-    console.log(`Selected Tab Label: ${selectedTabLabel}`);
-  }
 }
