@@ -23,10 +23,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr [hidden]="loading" *ngFor="let message of messages"
-            [queryParams]="{tab: 'Messages'}"
-            routerLink="{{container === 'Outbox' ? '/members/' + message.recipientUsername : '/members/' + message.senderUsername}}">   
-                    <td>{{message.content}}</td>
+            <tr class="hover:bg-gray-100 shadow-sm" [hidden]="loading" *ngFor="let message of messages">    
+                    <td   [queryParams]="{tab: 'Messages'}"
+                    routerLink="{{container === 'Outbox' ? '/members/' + message.recipientUsername : '/members/' + message.senderUsername}}" >{{message.content}}</td>
                 <td>
                     <div *ngIf="container === 'Outbox'">
                         <img class="w-16 mask mask-squircle" src="{{message.recipientPhotoUrl}}" alt="recipient-photo">
@@ -38,9 +37,9 @@
                     </div>
                 </td>
                 <td>{{(message.messageSent | date: "mediumTime")}}</td>
-                <td>
-                    <button class="btn bg-red-500 text-white">Delete</button>
-                </td>
+            <td>
+                <button (click)="$event.stopPropagation" (click)="deleteMessage(message.id)" class="btn bg-red-500 text-white">Delete 1</button>
+            </td>
             </tr>
         </tbody>
     </table>

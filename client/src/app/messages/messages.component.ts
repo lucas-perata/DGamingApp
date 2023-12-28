@@ -42,5 +42,14 @@ export class MessagesComponent {
       this.pageIndex = 0;
       this.pageNumber = e.pageIndex + 1;
       this.loadMessages();
-    }
-  }}
+    } 
+  }
+
+  deleteMessage(id: number) {
+    this.messageService.deleteMessage(id).subscribe({
+      next: () => this.messages?.splice(this.messages.findIndex(m => m.id === id, 1))
+    })
+  }
+
+
+}
