@@ -41,16 +41,24 @@
                     <div *ngIf="!message.dateRead && message.senderUsername !== this.username" class="chat-footer opacity-50">
                         Delivered
                     </div>
+                    <div *ngIf="message.dateRead && message.senderUsername !== this.username" class="chat-footer opacity-50">
+                      Seen
+                    </div>
                   </div> 
             </div>
         </li>
     </ul>
     <div class="card-footer w-100 bg-gray-200">
-        <div class="flex p-4">
-            <input type="text" placeholder="Send a message to {{this.username}}" class="input w-full" /> 
-            <button type="submit" class="btn">
+        <form #messageForm="ngForm" class="flex p-4" (ngSubmit)="sendMessage()" autocomplete="off">
+            <input type="text" 
+            name="messageContent" 
+            required 
+            [(ngModel)]="messageContent"
+            placeholder="Send a message to {{this.username}}" 
+            class="input w-full" /> 
+            <button type="submit" class="btn ml-3" [disabled]="!messageForm.valid">
                 Send
             </button>
-        </div>
+        </form>
     </div>
 </div>
