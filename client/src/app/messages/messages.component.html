@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let message of messages"
+            <tr [hidden]="loading" *ngFor="let message of messages"
             [queryParams]="{tab: 'Messages'}"
             routerLink="{{container === 'Outbox' ? '/members/' + message.recipientUsername : '/members/' + message.senderUsername}}">   
                     <td>{{message.content}}</td>
@@ -46,7 +46,7 @@
     </table>
 </div>
 
-<div class="flex justify-center" *ngIf="pagination && messages!.length > pagination.itemsPerPage" >
+<div [hidden]="loading" class="flex justify-center" *ngIf="pagination && messages!.length > pagination.itemsPerPage" >
     <mat-paginator 
     (page)="handlePageEvent($event)"
     [(ngModel)]="this.pagination.currentPage"
@@ -56,14 +56,3 @@
     >
     </mat-paginator>    
 </div>
-
-
-<!-- <div *ngFor="let message of messages">
-<div class="chat chat-start">
-    <div class="chat-bubble chat-bubble-primary">{{message.content}}</div>
-</div>
-
-<div class="chat chat-end">
-    <div class="chat-bubble chat-bubble-success">You have been given a great honor.</div>
-</div>
-</div> -->

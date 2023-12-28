@@ -16,6 +16,7 @@ export class MessagesComponent {
   pageNumber = 1; 
   pageSize = 5; 
   pageIndex = 0;
+  loading = false;  
 
   constructor(private messageService: MessageService){}
 
@@ -24,10 +25,12 @@ export class MessagesComponent {
   }
 
   loadMessages() {
+    this.loading = true; 
     this.messageService.getMessages(this.pageNumber, this.pageSize, this.container).subscribe({
       next: response => {
         this.messages = response.result; 
         this.pagination = response.pagination
+        this.loading = false; 
       }
     })
   }
