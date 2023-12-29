@@ -1,4 +1,5 @@
 ﻿using DGamingApp.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,9 +9,9 @@ namespace DGamingApp.Data
 {
     public class Seed
     {
-        public static async Task SeedUsers(DataContext context)
+        public static async Task SeedUsers(UserManager<AppUser> userManager)
         {
-            if (await context.Users.AnyAsync()) return;
+            if (await userManager.Users.AnyAsync()) return;
 
             var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
 
@@ -20,15 +21,12 @@ namespace DGamingApp.Data
 
             foreach (var user in users)
             {
-                using var hmac = new HMACSHA512();
-
                 user.UserName = user.UserName.ToLower();
 
-                context.Users.Add(user);
-
-                await context.SaveChangesAsync();
+                await userManager.CreateAsync(user, "Pa$w0rd");
 
             }
+
         }
     }
 }
