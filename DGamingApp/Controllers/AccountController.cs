@@ -37,13 +37,16 @@ namespace DGamingApp.Controllers
 
             if (!result.Succeeded) return BadRequest(result.Errors); 
 
+            var roleResult = await _userManager.AddToRoleAsync(user, "Member"); 
+
+            if(!roleResult.Succeeded) return BadRequest(result.Errors); 
 
             var userRegistered = new UserDto
             {
                 Username = user.UserName,
                 KnownAs = user.KnownAs,
                 Gender = user.Gender, 
-                Token = _tokenService.CreateToken(user)
+                Token = await _tokenService.CreateToken(user)
             };
 
             return(userRegistered);
@@ -54,7 +57,7 @@ namespace DGamingApp.Controllers
         {
             var user = await _userManager.Users
             .Include(p => p.Photos)
-            .SingleOrDefaultAsync(u => u.UserName == loginDto.Username );
+            .SingleOrDefaultAsync(u => u.UserName == loginDto.Username);
 
             if (user == null) return Unauthorized("Invalid username");
 
@@ -67,8 +70,8 @@ namespace DGamingApp.Controllers
                 Username = user.UserName,
                 KnownAs = user.KnownAs,
                 Gender = user.Gender,
-                Token =  _tokenService.CreateToken(user),
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url
+                Token = await  _tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
             };
         }
 
