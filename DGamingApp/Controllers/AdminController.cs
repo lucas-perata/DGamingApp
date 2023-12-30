@@ -34,6 +34,33 @@ namespace DGamingApp.Controllers
             return Ok(users); 
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpPost("edit-roles/{username}")]
+        public async Task<ActionResult> EditRoles(string username, [FromQuery]string roles) 
+        {
+            if(string.IsNullOrEmpty(roles)) return BadRequest("Empty role"); 
+
+            var selectedRoles = roles.Split(",").ToArray(); 
+
+            var user = await _userManager.FindByNameAsync(username); 
+
+            if(user == null) return NotFound();  
+
+            var userRoles = await _userManager.GetRolesAsync(user); 
+
+            var result = await _userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles)); 
+
+            if(!result.Succeeded) return BadRequest("Fail to add role"); 
+
+            result = await _userManager.RemoveFromRolesAsync(user, userRoles.Except(selectedRoles)); 
+
+            if(!result.Succeeded) return BadRequest("Fail to remove role");  
+
+            return Ok(await _userManager.GetRolesAsync(user));
+
+        }
+        
+
         [Authorize(Policy = "ModeratePhotoRole")]
         [HttpGet("photos-to-moderate")]
         public ActionResult GetPhotosForModeration()
