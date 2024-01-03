@@ -37,6 +37,9 @@ export class AccountService {
   }
 
   setCurrentUser(user: User) {
+    user.roles = []; 
+    const roles = this.getDecodedToken(user.token).role; 
+    Array.isArray(roles) ? user.roles = roles : user.roles.push(roles); 
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
@@ -45,5 +48,16 @@ export class AccountService {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
   }
+
+  getDecodedToken(token: string) {
+    const parts = token.split('.');
+    if (parts.length === 3) {
+      const payload = parts[1];
+      return JSON.parse(atob(payload));
+    } else {
+      throw new Error('Invalid token format');
+    }
+  }
+  
 }
 

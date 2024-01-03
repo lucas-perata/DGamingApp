@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using DGamingApp.Data;
+using DGamingApp.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -8,6 +11,15 @@ namespace DGamingApp.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
+
+            services.AddIdentityCore<AppUser>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = false; 
+            }) 
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddEntityFrameworkStores<DataContext>(); 
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
                 {
@@ -19,6 +31,12 @@ namespace DGamingApp.Extensions
                     ValidateIssuer = false,
                     ValidateAudience = false,
                 };
+             });
+
+             services.AddAuthorization(opt => 
+             {
+                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin")); 
+                opt.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator")); 
              });
 
             return services;

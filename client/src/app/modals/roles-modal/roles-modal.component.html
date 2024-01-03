@@ -1,0 +1,20 @@
+<!-- roles-modal.component.html -->
+<h2 mat-dialog-title>Edit roles for {{ data.username }}</h2>
+<mat-dialog-content class="mat-typography">
+    <!-- roles-modal.component.html -->
+    <form #rolesForm="ngForm" id="rolesForm">
+        <div class="form-check" *ngFor="let role of data.availableRoles">
+        <mat-checkbox
+            [checked]="data.selectedRoles.includes(role)"
+            value="{{ role }}"
+            name="{{ role }}"
+            (change)="updateChecked(role, $event)"
+        > </mat-checkbox>
+        <label>{{ role }}</label>
+        </div>
+    </form>  {{data.selectedRoles}}
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="save()" cdkFocusInitial>Edit</button>
+</mat-dialog-actions>
