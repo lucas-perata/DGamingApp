@@ -1,0 +1,25 @@
+<div class="overflow-x-auto w-full">
+    <table class="table table-zebra">
+        <thead>
+            <tr>
+                <th>
+                    <p class="font-bold">Username</p>     
+                </th>
+                <th>
+                    Active roles
+                </th>
+                <th>
+                        
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td>{{user.username}}</td>
+                <td>{{user.roles}} </td>
+                <td><button mat-button (click)="openDialog(user)" class=" btn">Edit role</button> </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

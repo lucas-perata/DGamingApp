@@ -8,6 +8,7 @@ import {MatTab, MatTabChangeEvent, MatTabGroup, MatTabsModule} from '@angular/ma
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'src/app/_services/message.service';
 import { Message } from 'src/app/_models/message';
+import { HasRoleDirective } from 'src/app/_directives/has-role.directive';
 
 
 @Component({

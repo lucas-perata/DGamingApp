@@ -4,7 +4,7 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http"
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { MemberListComponent } from './members/member-list/member-list.component';
@@ -31,7 +31,13 @@ import { MAT_DATE_LOCALE} from '@angular/material/core';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
-import { TimeagoIntl, TimeagoFormatter, TimeagoCustomFormatter } from "ngx-timeago";
+import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { HasRoleDirective } from './_directives/has-role.directive';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { MatButton, MatButtonModule } from '@angular/material/button';
+
 
 
 @NgModule({
@@ -50,8 +56,10 @@ import { TimeagoIntl, TimeagoFormatter, TimeagoCustomFormatter } from "ngx-timea
     MemberEditComponent,
     PhotoEditComponent,
     TextInputComponent,
-    DatePickerComponent 
-  ],
+    DatePickerComponent,
+    HasRoleDirective,
+    AdminPanelComponent,
+    PhotoManagementComponent ],
   imports: [
     BrowserModule,
     MatTabsModule,
@@ -65,11 +73,17 @@ import { TimeagoIntl, TimeagoFormatter, TimeagoCustomFormatter } from "ngx-timea
     MaterialModule,
     MatButtonToggleModule,
     MatRadioModule,
+    MatDialogModule,
+    MatButtonModule,
+    UserManagementComponent,
     [ HttpClientModule, NgxGalleryModule ], 
   ],
   exports:[ 
     ToastrModule, 
     BrowserAnimationsModule,
+    HasRoleDirective,
+    MatDialogModule,
+    MatButtonModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

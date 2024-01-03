@@ -6,6 +6,7 @@
           <li><a class="text-gray-400" routerLink="/members" routerLinkActive="text-white">Matches</a></li>
           <li><a  class="text-gray-400" routerLink="/lists" routerLinkActive="text-white">Lists</a></li>
           <li><a  class="text-gray-400" routerLink="/messages" routerLinkActive="text-white">Messages</a></li>
+          <li *appHasRole="['Admin', 'Moderator']"><a  class="text-gray-400" routerLink="/admin" routerLinkActive="text-white">Admin</a></li>
         </ng-container>
       </ul>
     </div>
