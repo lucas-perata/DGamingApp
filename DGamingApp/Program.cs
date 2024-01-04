@@ -5,6 +5,7 @@ using DGamingApp.Interfaces;
 using DGamingApp.Middleware;
 using DGamingApp.Repository;
 using DGamingApp.Services;
+using DGamingApp.SignalIR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,11 +41,15 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().
-WithOrigins("https://localhost:4200")
-.WithExposedHeaders("Pagination"));
+app.UseCors(builder => builder
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("https://localhost:4200")
+    .WithExposedHeaders("Pagination"));
 
 app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence"); 
 
 // Seed 
 using var scope = app.Services.CreateScope();
