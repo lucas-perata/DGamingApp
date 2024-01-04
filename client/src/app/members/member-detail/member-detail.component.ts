@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MessageService } from 'src/app/_services/message.service';
 import { Message } from 'src/app/_models/message';
 import { HasRoleDirective } from 'src/app/_directives/has-role.directive';
+import { PresenceService } from 'src/app/_services/presence.service';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class MemberDetailComponent {
   changeTab?: MatTabChangeEvent;
   matTabGroup?: MatTabGroup;
 
-  constructor(private memberService : MembersService, private route: ActivatedRoute, private messageService: MessageService ) {} 
+  constructor(private memberService : MembersService, private route: ActivatedRoute, private messageService: MessageService,
+    public presenceService: PresenceService) {} 
 
   ngAfterViewInit(): void {
     // Check if the tabGroup and tabs are initialized

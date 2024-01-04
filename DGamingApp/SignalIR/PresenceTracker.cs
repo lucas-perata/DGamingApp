@@ -16,7 +16,7 @@ namespace DGamingApp.SignalIR
                 }
                 else 
                 {
-                    OnlineUsers.Add(username, new List<string>{connectionId})
+                    OnlineUsers.Add(username, new List<string>{connectionId});
                 }
             }
 

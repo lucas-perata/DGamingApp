@@ -1,25 +1,27 @@
-<div class="card m-4 max-w-3xl  bg-base-100 shadow-sm border hover:border-secondary-accent">
+<div *ngIf="member">
+    <div class="card m-4 max-w-3xl  bg-base-100 shadow-sm border hover:border-secondary-accent">
         <figure class="card-img-wrapper">
-            <img src="{{member?.photoUrl}}" alt="{{member?.knownAs}}" class="w-40 transform ease-in transition duration-450 hover:scale-105" />
+            <img src="{{member.photoUrl}}" alt="{{member.knownAs}}" class="w-40 transform ease-in transition duration-450 hover:scale-105" />
             <ul class="flex justify-center list-inline member-icons animate text-center animate">
                 <li class="list-inline-item">
-                    <button routerLink="/members/{{member?.userName}}" class="btn btn-primary"><i class="fa fa-user"></i></button>
+                    <button routerLink="/members/{{member.userName}}" class="btn btn-primary"><i class="fa fa-user"></i></button>
                 </li>
                 <li class="list-inline-item">
                     <button (click)="addLike(member!)"  class="btn btn-primary"><i class="fa fa-heart"></i></button>
                 </li>
                 <li class="list-inline-item">
                     <button class="btn btn-primary"><i class="fa fa-envelope"
-                        routerLink="/members/{{member?.userName}}"
+                        routerLink="/members/{{member.userName}}"
                         [queryParams]="{tab: 'Messages'}"
-                        ></i></button>
+                        ></i></button> 
                 </li>
             </ul>
-        </figure>
+        </figure>  
     <div class="p-2 items-center text-left">
-      <h2 class="card-title">{{member?.knownAs}}</h2>
-      <p class="text-gray-400">{{member?.age}}</p>
+      <h2 class="card-title">{{member.knownAs}} <span class="" *ngIf="(presenceService.onlineUsers$ | async)?.includes(member.userName)"><div class="pulse circle green"></div></span></h2> 
+      <p class="text-gray-400">{{member.age}}</p>
       <div class="card-actions">
       </div>
     </div>
   </div>
+</div>
