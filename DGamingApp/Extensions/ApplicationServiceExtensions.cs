@@ -3,6 +3,7 @@ using DGamingApp.Helpers;
 using DGamingApp.Interfaces;
 using DGamingApp.Repository;
 using DGamingApp.Services;
+using DGamingApp.SignalIR;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -30,6 +31,7 @@ namespace DGamingApp.Extensions
             services.AddScoped<ILikesRepository, LikesRepository>(); 
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddSignalR();
+            services.AddSingleton<PresenceTracker>(); 
 
             return services;
         }
