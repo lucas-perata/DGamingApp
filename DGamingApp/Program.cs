@@ -50,6 +50,7 @@ app.UseCors(builder => builder
 
 app.MapControllers();
 app.MapHub<PresenceHub>("hubs/presence"); 
+app.MapHub<MessageHub>("hubs/message"); 
 
 // Seed 
 using var scope = app.Services.CreateScope();
