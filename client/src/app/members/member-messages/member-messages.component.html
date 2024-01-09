@@ -1,9 +1,9 @@
 <div>
-    <div *ngIf="messages.length === 0">
+    <div *ngIf="(messageService.messageThread$ |async)?.length === 0">
         No messages yet...say hi
     </div> 
-    <ul *ngIf="messages.length > 0" class="p-5"> 
-        <li *ngFor="let message of messages">
+    <ul *ngIf="(messageService.messageThread$ |async)!.length > 0" class="p-5"> 
+        <li *ngFor="let message of (messageService.messageThread$ | async)">
             <div *ngIf="message.senderUsername === this.username" class="">
                 <!-- Left chat -->
                 <div class="chat chat-start">

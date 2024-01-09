@@ -28,6 +28,13 @@ var app = builder.Build();
 // Exception middleware
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseCors(builder => builder
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("https://localhost:4200")
+    .WithExposedHeaders("Pagination"));
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -40,13 +47,6 @@ app.UseHttpsRedirection();
 // Auth
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseCors(builder => builder
-    .AllowAnyHeader()
-    .AllowAnyMethod()
-    .AllowCredentials()
-    .WithOrigins("https://localhost:4200")
-    .WithExposedHeaders("Pagination"));
 
 app.MapControllers();
 app.MapHub<PresenceHub>("hubs/presence"); 
