@@ -14,7 +14,7 @@
                     </div>
                     <div class="chat-header">
                     {{message.senderUsername}}
-                      <time class="text-xs opacity-50">{{message.messageSent + 'Z' | timeago}}</time>
+                      <time class="text-xs opacity-50">{{message.messageSent | timeago}}</time>
                     </div>
                     <div class="chat-bubble" *ngIf="message.senderUsername === this.username">{{message.content}}</div>
                     <div *ngIf="message.dateRead && message.senderUsername !== this.username" class="chat-footer opacity-50">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="chat-header">
                     {{"Me"}}
-                      <span class="text-xs opacity-50">{{message.messageSent + 'Z' | timeago}}</span>
+                      <span class="text-xs opacity-50">{{message.messageSent | timeago}}</span>
                     </div>
                     <div class="chat-bubble" *ngIf="message.senderUsername !== this.username">{{message.content}}</div>
                     <div *ngIf="!message.dateRead && message.senderUsername !== this.username" class="chat-footer opacity-50">
