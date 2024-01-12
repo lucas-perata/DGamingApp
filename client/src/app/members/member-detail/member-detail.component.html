@@ -4,6 +4,9 @@
             <img src="{{member.photoUrl}}" alt="{{member.knownAs}}" class="rounded-xl shadow-lg" style="width: 15rem"> 
         </div>
         <div class="p-4 grid gap-4">
+            <div class="mt-0" *ngIf="(presenceService.onlineUsers$ | async)?.includes(member.userName)">
+                <div class="fa fa-circle flex" style="color: green;"><p class="text-black ml-2">Online now</p></div>
+            </div>
             <div>
                 <strong>Location:</strong>
                 <p>{{member.city}}</p>
@@ -46,7 +49,7 @@
                 <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery h-full"></ngx-gallery>    
             </mat-tab>
             <mat-tab label="Messages" > 
-                <app-member-messages [username]="member.userName" [messages]="messages"> </app-member-messages>  
+                <app-member-messages [username]="member.userName"> </app-member-messages>  
             </mat-tab>
           </mat-tab-group>
     </div>

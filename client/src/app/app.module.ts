@@ -37,6 +37,8 @@ import { HasRoleDirective } from './_directives/has-role.directive';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { RouteReuseStrategy } from '@angular/router';
+import { CustomRouteReuseStrategy } from './_services/customRouteReuseStrategy';
 
 
 
@@ -90,6 +92,7 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    {provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy}
   ],
   bootstrap: [AppComponent]
 })
