@@ -36,6 +36,8 @@ namespace DGamingApp.SignalIR
 
             var messages = await _uow.MessageRepository.GetMessageThread(Context.User.GetUsername(), otherUser); 
 
+            if(_uow.hasChanges()) await _uow.Complete(); 
+
             await Clients.Group(groupName).SendAsync("ReceiveMessageThread", messages); 
         }
 
