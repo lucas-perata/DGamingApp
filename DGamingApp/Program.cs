@@ -5,6 +5,7 @@ using DGamingApp.Interfaces;
 using DGamingApp.Middleware;
 using DGamingApp.Repository;
 using DGamingApp.Services;
+using DGamingApp.SignalIR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,13 @@ var app = builder.Build();
 // Exception middleware
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseCors(builder => builder
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("https://localhost:4200")
+    .WithExposedHeaders("Pagination"));
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -40,11 +48,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().
-WithOrigins("https://localhost:4200")
-.WithExposedHeaders("Pagination"));
-
 app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence"); 
+app.MapHub<MessageHub>("hubs/message"); 
 
 // Seed 
 using var scope = app.Services.CreateScope();
@@ -56,6 +62,7 @@ try
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>(); 
 
     await context.Database.MigrateAsync();
+    await context.Database.ExecuteSqlRawAsync("DELETE FROM [Connections]"); 
     await Seed.SeedUsers(userManager, roleManager);
 }
 catch (Exception ex)
