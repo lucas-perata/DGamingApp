@@ -13,13 +13,13 @@ namespace DGamingApp.Controllers
     [Authorize]
     public class UsersController : BaseApiController
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService)
+        public UsersController(IUnitOfWork uow, IMapper mapper, IPhotoService photoService)
         {
-            _userRepository = userRepository;
+            _uow = uow;
             _mapper = mapper;
             _photoService = photoService;
         }
@@ -27,7 +27,7 @@ namespace DGamingApp.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedList<MemberDto>>> GetAll([FromQuery]UserParams userParams)
         {
-            var currentUser = await _userRepository.GetUserByName(User.GetUsername()); 
+            var currentUser = await _uow.UserRepository.GetUserByName(User.GetUsername()); 
             userParams.CurrentUsername = currentUser.UserName;
 
             if (string.IsNullOrEmpty(userParams.Gender)) 
@@ -35,7 +35,7 @@ namespace DGamingApp.Controllers
                 userParams.Gender = currentUser.Gender == "male" ? "female" : "male";
             }
 
-            var users = await _userRepository.GetMembersAsync(userParams);
+            var users = await _uow.UserRepository.GetMembersAsync(userParams);
 
             Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, 
             users.TotalCount, users.TotalPages));
@@ -49,7 +49,7 @@ namespace DGamingApp.Controllers
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
-            var user = await _userRepository.GetUserById(id);
+            var user = await _uow.UserRepository.GetUserById(id);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -62,7 +62,7 @@ namespace DGamingApp.Controllers
         [HttpGet("{name}")]
         public async Task<IActionResult> GetUserByName(string name)
         {
-            var user = await _userRepository.GetMember(name);
+            var user = await _uow.UserRepository.GetMember(name);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -76,13 +76,13 @@ namespace DGamingApp.Controllers
             var username = User.GetUsername(); // Get username from token (JWT)
             if (username == null) return BadRequest("Not found");
 
-            var user = await _userRepository.GetUserByName(username);
+            var user = await _uow.UserRepository.GetUserByName(username);
 
             if (user == null) return BadRequest("Not found"); 
 
             _mapper.Map(memberUpdateDto, user);
 
-            if (await _userRepository.SaveAllAsync()) return NoContent();
+            if (await _uow.Complete()) return NoContent();
 
             return BadRequest("Failed to update user");
         }
@@ -94,7 +94,7 @@ namespace DGamingApp.Controllers
 
             if (username == null) return NotFound();
 
-            var user = await _userRepository.GetUserByName(username); 
+            var user = await _uow.UserRepository.GetUserByName(username); 
 
             if(user == null) return NotFound();  
 
@@ -112,7 +112,7 @@ namespace DGamingApp.Controllers
 
             user.Photos.Add(photo); 
 
-            if(await _userRepository.SaveAllAsync()) 
+            if(await _uow.Complete())
             {
                 return CreatedAtAction(nameof(GetUserByName), new {name = user.UserName}, _mapper.Map<PhotoDto>(photo));
             }
@@ -124,7 +124,7 @@ namespace DGamingApp.Controllers
 
         public async Task<ActionResult> SetMainPhoto(int photoId) 
         {
-            var user = await _userRepository.GetUserByName(User.GetUsername()); 
+            var user = await _uow.UserRepository.GetUserByName(User.GetUsername()); 
 
             if (user == null) return NotFound(); 
 
@@ -139,7 +139,7 @@ namespace DGamingApp.Controllers
             if (currentMain != null) currentMain.IsMain = false; 
             photo.IsMain = true; 
 
-            if(await _userRepository.SaveAllAsync()) return NoContent(); 
+            if(await _uow.Complete()) return NoContent(); 
 
             return BadRequest("Problem setting main photo");
         }
@@ -147,7 +147,7 @@ namespace DGamingApp.Controllers
         [HttpDelete("delete-photo/{photoId}")] 
         public async Task<ActionResult> DeletePhoto(int photoId) 
         {
-            var user = await _userRepository.GetUserByName(User.GetUsername()); 
+            var user = await _uow.UserRepository.GetUserByName(User.GetUsername()); 
 
             if (user == null) return NotFound(); 
 
@@ -165,7 +165,7 @@ namespace DGamingApp.Controllers
 
             user.Photos.Remove(photo); 
 
-            if(await _userRepository.SaveAllAsync()) return Ok();
+            if(await _uow.Complete()) return Ok();
 
             return BadRequest("There was a problem deleting the photo");
         }
