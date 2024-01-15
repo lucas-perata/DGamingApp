@@ -12,5 +12,6 @@ namespace DGamingApp.Interfaces
         void Update(AppUser user);
         Task<MemberDto> GetMember(string username);
         Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams);
+        Task<string> GetUserGender(string username);
     }
 }

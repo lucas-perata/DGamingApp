@@ -62,6 +62,13 @@ namespace DGamingApp.Repository
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<string> GetUserGender(string username)
+        {
+            return await _context.Users.Where(x => x.UserName == username)
+                    .Select(x => x.Gender)
+                    .FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<AppUser>> GetUsers()
         {
             return await _context.Users
