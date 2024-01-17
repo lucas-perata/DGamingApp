@@ -10,8 +10,8 @@ namespace DGamingApp.Interfaces
         Task<AppUser> GetUserById(int id);
         Task<AppUser> GetUserByName(string name);
         void Update(AppUser user);
-        Task<bool> SaveAllAsync();
         Task<MemberDto> GetMember(string username);
         Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams);
+        Task<string> GetUserGender(string username);
     }
 }

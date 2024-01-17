@@ -21,17 +21,15 @@ namespace DGamingApp.Extensions
             services.AddCors();
 
             //Repos
-            services.AddScoped<IUserRepository, UserRepository>();
+            
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPhotoService, PhotoService>();
-            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<LogUserActivity>();
-            services.AddScoped<ILikesRepository, LikesRepository>(); 
-            services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddSignalR();
             services.AddSingleton<PresenceTracker>(); 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }
